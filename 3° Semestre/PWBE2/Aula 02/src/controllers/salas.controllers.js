@@ -3,7 +3,7 @@ const prisma = require("../data/prisma");
 const novaTurma = async (req, res) => {
     const turma = req.body;
 
-    const nturma = await prpisma.turmas.create({
+    const nturma = await prisma.turmas.create({
         data: turma
     });
 
