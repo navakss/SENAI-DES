@@ -7,7 +7,7 @@ const listarCarros = async (req, res) => {
 };
 
 const buscarCarro = async (req, res) => {
-    const id = req.params;
+    const id = parseInt(req.params.id, 10);
 
     const buscar = await prisma.carros.findUnique({
         where:{id}
@@ -28,9 +28,11 @@ const novoCarro = async (req, res) => {
         return res.json({erro:"Não é Permitido Espaço na Placa"}).status(400).end();
     }
     
-    if(length.placa != 7) {
+    if(placa.length != 7) {
         return res.json({erro:"Placa Deve ter 7 Caracteres"}).status(400).end();
     }
+
+    placa = placa.toUpperCase();
 
     //Validação Marca Modelo
     if(!marca || !modelo) {
@@ -53,7 +55,9 @@ const novoCarro = async (req, res) => {
 
     //Validação Ano
 
-    if(!ano || ano.length == 4) {
+
+    ano = ano.toString();
+    if(!ano || ano.length > 4) {
         return res.json({erro:"Ano Deve ter 4 Dígitos"}).status(400).end();
     }
 
@@ -63,11 +67,13 @@ const novoCarro = async (req, res) => {
         return res.json({erro:"Ano não Pode Conter Letras"}).status(400).end();
     }
 
+    ano = parseInt(ano, 10);
+
     //Validação Placa Dupla
 
     const carros = await prisma.carros.findMany();
 
-    const placaDupla = carros.some(c => c.placa.toUpperCase() = placa.toUpperCase());
+    const placaDupla = carros.some(c => c.placa.toUpperCase() == placa.toUpperCase());
 
     if(placaDupla) {
         return res.json({erro:"Já Existe um Carro com Essa Placa"}).status(500).end();
@@ -87,7 +93,7 @@ const novoCarro = async (req, res) => {
 };
 
 const apagarCarro = async (req, res) => {
-    const id = req.params;
+    const id = parseInt(req.params.id, 10);
 
     const carro = await prisma.carros.delete({
         where:{id}
@@ -97,7 +103,7 @@ const apagarCarro = async (req, res) => {
 };
 
 const atualizarCarro = async (req, res) =>{
-    const id = req.params;
+    const id = parseInt(req.params.id, 10);
     const dados = req.body;
 
     const acarros = await prisma.carros.update({

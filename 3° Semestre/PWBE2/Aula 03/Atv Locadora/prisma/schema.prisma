@@ -12,18 +12,18 @@ datasource db {
   provider = "mysql"
 }
 
-model Carros {
-  id Int @id @default(autoincrement())
-  ano Int
-  modelo String
-  marca String
-  placa String @unique
+model Clientes {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  CPF   String @unique
+  CNH   String
+  email String @unique
 }
 
-model Clientes {
-  id Int @id @default(autoincrement())
-  nome String
-  CPF Int @unique
-  CNH Int @unique
-  email String @unique
+model Carros {
+  id     Int    @id @default(autoincrement())
+  placa  String @unique
+  marca  String
+  modelo String
+  ano    Int
 }
